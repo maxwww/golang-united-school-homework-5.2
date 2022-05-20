@@ -3,6 +3,7 @@ package cache
 import "time"
 
 type EmptyStruct struct{}
+
 type Cache struct {
 	keyValues   map[string]string
 	deadlineMap map[string]chan EmptyStruct
@@ -51,6 +52,7 @@ func (c *Cache) PutTill(key, value string, deadline time.Time) {
 				return
 			case <-timer.C:
 				delete(c.keyValues, key)
+				delete(c.deadlineMap, key)
 			}
 		}()
 	}
